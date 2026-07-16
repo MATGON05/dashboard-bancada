@@ -5,10 +5,9 @@ import threading
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-# ALTERE ESTE CAMINHO para a pasta do seu projeto
-REPO_PATH = r"C:\Users\MTWII-BANCADA\Documents\backup loja"  
+# 🔥 MAGIA: Pega o caminho da pasta onde este script está rodando, sem precisar digitar caminho fixo!
+REPO_PATH = os.path.dirname(os.path.abspath(__file__))  
 
-# Aguarda 2 segundos após a última alteração para não enviar commits demais
 TEMPO_ESPERA = 2  
 ultimo_evento = 0
 
@@ -35,10 +34,8 @@ class ManipuladorDeMudancas(FileSystemEventHandler):
     def on_modified(self, event):
         global ultimo_evento
         if not event.is_directory:
-            # Evita múltiplos disparos para o mesmo arquivo
             if time.time() - ultimo_evento > TEMPO_ESPERA:
                 ultimo_evento = time.time()
-                # Pequeno delay para garantir que o arquivo foi salvo por completo
                 time.sleep(0.5)
                 sincronizar_agora()
 
@@ -53,10 +50,8 @@ if __name__ == "__main__":
     print("🚀 Monitorando a pasta...")
     print(f"📂 {REPO_PATH}")
     
-    # Inicia a thread que puxa atualizações a cada 30s
     threading.Thread(target=puxar_automaticamente, daemon=True).start()
     
-    # Inicia o monitoramento de mudanças
     event_handler = ManipuladorDeMudancas()
     observer = Observer()
     observer.schedule(event_handler, REPO_PATH, recursive=True)
