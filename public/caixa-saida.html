@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caixa Saída - SUIT-TECH</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo"><img src="logo.png" alt="SUIT-TECH"></span>
+        <div>
+          <h1>SUIT-TECH</h1>
+          <small>Assistência Técnica</small>
+        </div>
+      </div>
+      <nav>
+        <a href="index.html" data-page="dashboard">Dashboard</a>
+        <a href="clientes.html" data-page="clientes">Clientes</a>
+        <a href="orcamentos.html" data-page="orcamentos">Orçamentos</a>
+        <a href="caixa-entrada.html" data-page="caixa-entrada">Caixa Entrada</a>
+        <a href="caixa-saida.html" class="active" data-page="caixa-saida">Caixa Saída</a>
+        <a href="relatorios.html" data-page="relatorios">Relatórios</a>
+        <a href="agendamentos.html" data-page="agendamentos">Agendamentos</a>
+      </nav>
+      <footer class="sidebar-footer">
+        <span>rodando local</span>
+      </footer>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <h2>Controle de Caixa - Saídas</h2>
+        <button class="btn btn-primary" onclick="openCashOutModal()">+ Nova Saída</button>
+      </header>
+
+      <section class="panel">
+        <div class="toolbar">
+          <select id="filter-out-month" onchange="loadCashOut()">
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+          <input type="number" id="filter-out-year" value="2026" onchange="loadCashOut()">
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card accent-red">
+            <span class="stat-label">Total Saídas</span>
+            <strong class="stat-value" id="out-total">R$ 0,00</strong>
+          </div>
+          <div class="stat-card accent-green">
+            <span class="stat-label">Pago</span>
+            <strong class="stat-value" id="out-paid">R$ 0,00</strong>
+          </div>
+          <div class="stat-card accent-orange">
+            <span class="stat-label">Não Pago</span>
+            <strong class="stat-value" id="out-unpaid">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <div class="chart-wrapper" style="margin:20px 0; max-height:300px">
+          <canvas id="cashOutChart"></canvas>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th class="actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="cash-out-table">
+            <tr><td colspan="5" class="empty">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <div id="cash-out-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="cash-out-modal-title">Nova Saída</h3>
+        <button class="close" onclick="closeCashOutModal()">&times;</button>
+      </div>
+      <form id="cash-out-form" onsubmit="saveCashOut(event)">
+        <input type="hidden" id="cash-out-id">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Data *</label>
+            <input type="date" id="cash-out-date" required>
+          </div>
+          <div class="form-group">
+            <label>Valor (R$) *</label>
+            <input type="number" step="0.01" id="cash-out-amount" required>
+          </div>
+          <div class="form-group span-2">
+            <label>Descrição *</label>
+            <input type="text" id="cash-out-description" required placeholder="Ex: Compra de peças">
+          </div>
+          <div class="form-group span-2">
+            <label>
+              <input type="checkbox" id="cash-out-paid" checked> Pago
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" onclick="closeCashOutModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('filter-out-month').value = String(new Date().getMonth() + 1);
+      document.getElementById('filter-out-year').value = new Date().getFullYear();
+      loadCashOut();
+    });
+  </script>
+</body>
+</html>

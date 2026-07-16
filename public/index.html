@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUIT-TECH - Assistência Técnica</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo"><img src="logo.png" alt="SUIT-TECH"></span>
+        <div>
+          <h1>SUIT-TECH</h1>
+          <small>Assistência Técnica</small>
+        </div>
+      </div>
+      <nav>
+        <a href="index.html" class="active" data-page="dashboard">Dashboard</a>
+        <a href="clientes.html" data-page="clientes">Clientes</a>
+        <a href="orcamentos.html" data-page="orcamentos">Orçamentos</a>
+        <a href="caixa-entrada.html" data-page="caixa-entrada">Caixa Entrada</a>
+        <a href="caixa-saida.html" data-page="caixa-saida">Caixa Saída</a>
+        <a href="relatorios.html" data-page="relatorios">Relatórios</a>
+        <a href="agendamentos.html" data-page="agendamentos">Agendamentos</a>
+      </nav>
+      <footer class="sidebar-footer">
+        <span> rodando local</span>
+      </footer>
+    </aside>
+
+    <main class="content dashboard-bg">
+      <div class="dashboard-logo">
+        <img src="logo.png" alt="SUIT-TECH">
+      </div>
+      <header class="topbar">
+        <h2>Dashboard</h2>
+      </header>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">Total Orçamentos</span>
+          <strong class="stat-value" id="stat-total">0</strong>
+        </div>
+        <div class="stat-card accent-orange">
+          <span class="stat-label">Pendentes</span>
+          <strong class="stat-value" id="stat-pending">0</strong>
+        </div>
+        <div class="stat-card accent-blue">
+          <span class="stat-label">Aprovados</span>
+          <strong class="stat-value" id="stat-approved">0</strong>
+        </div>
+        <div class="stat-card accent-green">
+          <span class="stat-label">Concluídos</span>
+          <strong class="stat-value" id="stat-completed">0</strong>
+        </div>
+        <div class="stat-card accent-purple">
+          <span class="stat-label">Entregues</span>
+          <strong class="stat-value" id="stat-delivered">0</strong>
+        </div>
+        <div class="stat-card accent-red">
+          <span class="stat-label">Cancelados</span>
+          <strong class="stat-value" id="stat-cancelled">0</strong>
+        </div>
+        <div class="stat-card accent-gold">
+          <span class="stat-label">Faturamento</span>
+          <strong class="stat-value" id="stat-revenue">R$ 0,00</strong>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h3>Orçamentos Recentes</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>OS</th>
+              <th>Cliente</th>
+              <th>Aparelho</th>
+              <th>Defeito</th>
+              <th>Valor</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="recent-table">
+            <tr><td colspan="6" class="empty">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h3>Status das Ordens de Serviço</h3>
+        <div id="os-status-grid" class="status-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', loadDashboard);
+  </script>
+</body>
+</html>

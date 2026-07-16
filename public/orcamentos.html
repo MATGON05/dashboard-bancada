@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orçamentos - SUIT-TECH</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo"><img src="logo.png" alt="SUIT-TECH"></span>
+        <div>
+          <h1>SUIT-TECH</h1>
+          <small>Assistência Técnica</small>
+        </div>
+      </div>
+      <nav>
+        <a href="index.html" data-page="dashboard">Dashboard</a>
+        <a href="clientes.html" data-page="clientes">Clientes</a>
+        <a href="orcamentos.html" class="active" data-page="orcamentos">Orçamentos</a>
+        <a href="caixa-entrada.html" data-page="caixa-entrada">Caixa Entrada</a>
+        <a href="caixa-saida.html" data-page="caixa-saida">Caixa Saída</a>
+        <a href="relatorios.html" data-page="relatorios">Relatórios</a>
+        <a href="agendamentos.html" data-page="agendamentos">Agendamentos</a>
+      </nav>
+      <footer class="sidebar-footer">
+        <span> rodando local</span>
+      </footer>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <h2>Orçamentos</h2>
+        <button class="btn btn-primary" onclick="openBudgetModal()">+ Novo Orçamento</button>
+      </header>
+
+      <section class="panel">
+        <div class="toolbar">
+          <input type="text" id="search-budget" placeholder="Buscar por cliente, aparelho ou defeito..." oninput="renderBudgets()">
+          <select id="filter-status" onchange="renderBudgets()">
+            <option value="">Todos os status</option>
+            <option>Pendente</option>
+            <option>Aprovado</option>
+            <option>Em Reparo</option>
+            <option>Concluído</option>
+            <option>Entregue</option>
+            <option>Cancelado</option>
+          </select>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>OS</th>
+              <th>Data</th>
+              <th>Cliente</th>
+              <th>Aparelho</th>
+              <th>Defeito</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th class="actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="budgets-table">
+            <tr><td colspan="8" class="empty">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <div id="budget-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="budget-modal-title">Novo Orçamento</h3>
+        <button class="close" onclick="closeBudgetModal()">&times;</button>
+      </div>
+      <form id="budget-form" onsubmit="saveBudget(event)">
+        <input type="hidden" id="budget-id">
+        <div class="form-grid">
+          <div class="form-group span-2">
+            <label>Cliente *</label>
+            <select id="budget-client" required></select>
+            <small><a href="clientes.html">Cadastrar novo cliente</a></small>
+          </div>
+          <div class="form-group">
+            <label>Tipo de Aparelho *</label>
+            <select id="budget-device" required>
+              <option value="">Selecione</option>
+              <option>Celular</option>
+              <option>Notebook</option>
+              <option>Video Game</option>
+              <option>Tablet</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="budget-status">
+              <option>Pendente</option>
+              <option>Aprovado</option>
+              <option>Em Reparo</option>
+              <option>Concluído</option>
+              <option>Entregue</option>
+              <option>Cancelado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Marca</label>
+            <input type="text" id="budget-brand" placeholder="Ex: Samsung, Apple, Dell">
+          </div>
+          <div class="form-group">
+            <label>Modelo</label>
+            <input type="text" id="budget-model" placeholder="Ex: Galaxy S23">
+          </div>
+          <div class="form-group">
+            <label>Número de Série</label>
+            <input type="text" id="budget-serial">
+          </div>
+          <div class="form-group">
+            <label>Valor do Serviço (R$)</label>
+            <input type="number" step="0.01" id="budget-value" placeholder="0,00" oninput="calculateFinalValue()">
+          </div>
+          <div class="form-group">
+            <label>Valor das Peças (R$)</label>
+            <input type="number" step="0.01" id="budget-parts-cost" placeholder="0,00" oninput="calculateFinalValue()">
+          </div>
+          <div class="form-group">
+            <label>Custos Extras (R$)</label>
+            <input type="number" step="0.01" id="budget-extra-cost" placeholder="0,00" oninput="calculateFinalValue()">
+          </div>
+          <div class="form-group">
+            <label>Margem de Lucro (%)</label>
+            <input type="number" step="0.01" id="budget-profit-margin" placeholder="0" oninput="calculateFinalValue()">
+          </div>
+          <div class="form-group">
+            <label>Valor Final Calculado (R$)</label>
+            <input type="text" id="budget-final-value" readonly>
+          </div>
+          <div class="form-group span-2">
+            <label>Observações Financeiras</label>
+            <textarea id="budget-financial-notes" rows="2"></textarea>
+          </div>
+          <div class="form-group span-2">
+            <label>Defeito / Solicitação</label>
+            <textarea id="budget-problem" rows="3"></textarea>
+          </div>
+          <div class="form-group span-2">
+            <label>Diagnóstico / Observações</label>
+            <textarea id="budget-diagnosis" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" onclick="closeBudgetModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadClientsIntoSelect('budget-client');
+      loadBudgets();
+    });
+  </script>
+</body>
+</html>

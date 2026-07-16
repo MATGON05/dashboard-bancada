@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assistência Técnica - SUIT-TECH</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo"><img src="logo.png" alt="SUIT-TECH"></span>
+        <div>
+          <h1>SUIT-TECH</h1>
+          <small>Assistência Técnica</small>
+        </div>
+      </div>
+      <nav>
+        <a href="index.html" data-page="dashboard">Dashboard</a>
+        <a href="orcamentos.html" data-page="orcamentos">Orçamentos</a>
+        <a href="agendamentos.html" data-page="agendamentos">Agendamentos</a>
+        <a href="assistencia.html" class="active" data-page="assistencia">Assistência Técnica</a>
+        <a href="clientes.html" data-page="clientes">Clientes</a>
+        <a href="relatorios.html" data-page="relatorios">Relatórios</a>
+      </nav>
+      <footer class="sidebar-footer">
+        <span> rodando local</span>
+      </footer>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <h2>Assistência Técnica</h2>
+      </header>
+
+      <section class="panel">
+        <div class="toolbar">
+          <input type="text" id="search-os" placeholder="Buscar OS, cliente ou aparelho..." oninput="renderServiceOrders()">
+          <select id="filter-os-status" onchange="renderServiceOrders()">
+            <option value="">Todos os status</option>
+            <option>Recebido</option>
+            <option>Em Análise</option>
+            <option>Aguardando Peça</option>
+            <option>Em Reparo</option>
+            <option>Pronto</option>
+            <option>Entregue</option>
+          </select>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>OS</th>
+              <th>Data</th>
+              <th>Cliente</th>
+              <th>Aparelho</th>
+              <th>Defeito</th>
+              <th>Técnico</th>
+              <th>Status</th>
+              <th class="actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="os-table">
+            <tr><td colspan="8" class="empty">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <div id="os-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="os-modal-title">Atualizar Ordem de Serviço</h3>
+        <button class="close" onclick="closeOsModal()">&times;</button>
+      </div>
+      <form id="os-form" onsubmit="saveServiceOrder(event)">
+        <input type="hidden" id="os-id">
+        <input type="hidden" id="os-budget-id">
+        <div class="form-grid">
+          <div class="form-group span-2">
+            <label>Cliente / Aparelho</label>
+            <input type="text" id="os-display" readonly>
+          </div>
+          <div class="form-group">
+            <label>Técnico Responsável</label>
+            <input type="text" id="os-technician">
+          </div>
+          <div class="form-group">
+            <label>Status *</label>
+            <select id="os-status" required>
+              <option>Recebido</option>
+              <option>Em Análise</option>
+              <option>Aguardando Peça</option>
+              <option>Em Reparo</option>
+              <option>Pronto</option>
+              <option>Entregue</option>
+            </select>
+          </div>
+          <div class="form-group span-2">
+            <label>Anotações do Serviço</label>
+            <textarea id="os-notes" rows="4"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" onclick="closeOsModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', loadServiceOrders);
+  </script>
+</body>
+</html>

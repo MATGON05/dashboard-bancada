@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatórios - SUIT-TECH</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo"><img src="logo.png" alt="SUIT-TECH"></span>
+        <div>
+          <h1>SUIT-TECH</h1>
+          <small>Assistência Técnica</small>
+        </div>
+      </div>
+      <nav>
+        <a href="index.html" data-page="dashboard">Dashboard</a>
+        <a href="clientes.html" data-page="clientes">Clientes</a>
+        <a href="orcamentos.html" data-page="orcamentos">Orçamentos</a>
+        <a href="caixa-entrada.html" data-page="caixa-entrada">Caixa Entrada</a>
+        <a href="caixa-saida.html" data-page="caixa-saida">Caixa Saída</a>
+        <a href="relatorios.html" class="active" data-page="relatorios">Relatórios</a>
+        <a href="agendamentos.html" data-page="agendamentos">Agendamentos</a>
+      </nav>
+      <footer class="sidebar-footer">
+        <span>rodando local</span>
+      </footer>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <h2>Relatórios</h2>
+      </header>
+
+      <section class="panel">
+        <div class="toolbar">
+          <select id="report-month">
+            <option value="">Mês</option>
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+          <input type="number" id="report-year" placeholder="Ano" min="2020" max="2099">
+          <button class="btn btn-primary" onclick="generateMonthlyReport()">Gerar Relatório</button>
+          <button class="btn" onclick="downloadMonthlyReport()">Baixar PDF Orçamentos</button>
+        </div>
+
+        <div id="report-result" style="display:none">
+          <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('tab-budget')">Orçamentos</button>
+            <button class="tab-btn" onclick="showTab('tab-cashin')">Caixa Entrada</button>
+            <button class="tab-btn" onclick="showTab('tab-cashout')">Caixa Saída</button>
+          </div>
+
+          <div id="tab-budget" class="tab-content active">
+            <div class="stats-grid">
+              <div class="stat-card">
+                <span class="stat-label">Total Orçamentos</span>
+                <strong class="stat-value" id="report-total">0</strong>
+              </div>
+              <div class="stat-card accent-gold">
+                <span class="stat-label">Faturamento</span>
+                <strong class="stat-value" id="report-revenue">R$ 0,00</strong>
+              </div>
+              <div class="stat-card accent-orange">
+                <span class="stat-label">Peças</span>
+                <strong class="stat-value" id="report-parts">R$ 0,00</strong>
+              </div>
+              <div class="stat-card accent-blue">
+                <span class="stat-label">Custos Extras</span>
+                <strong class="stat-value" id="report-extra">R$ 0,00</strong>
+              </div>
+              <div class="stat-card accent-green">
+                <span class="stat-label">Lucro Estimado</span>
+                <strong class="stat-value" id="report-profit">R$ 0,00</strong>
+              </div>
+            </div>
+            <div class="form-grid" style="margin-top:20px">
+              <div class="form-group">
+                <label>Por Status</label>
+                <div id="report-status" class="status-list"></div>
+              </div>
+              <div class="form-group">
+                <label>Por Aparelho</label>
+                <div id="report-device" class="status-list"></div>
+              </div>
+            </div>
+            <div class="chart-wrapper" style="margin-top:20px; height:300px">
+              <canvas id="report-budget-chart"></canvas>
+            </div>
+          </div>
+
+          <div id="tab-cashin" class="tab-content">
+            <p>Gráfico de entradas por dia do mês selecionado.</p>
+            <div class="chart-wrapper" style="height:300px">
+              <canvas id="report-cashin-chart"></canvas>
+            </div>
+          </div>
+
+          <div id="tab-cashout" class="tab-content">
+            <p>Gráfico de saídas por dia do mês selecionado.</p>
+            <div class="chart-wrapper" style="height:300px">
+              <canvas id="report-cashout-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="form-group span-2" style="margin-top:20px">
+            <label>Enviar relatório de orçamentos por email</label>
+            <div class="toolbar" style="padding:0">
+              <input type="email" id="report-email" placeholder="email@exemplo.com">
+              <button class="btn btn-primary" onclick="sendMonthlyReport()">Enviar Relatório</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    function showTab(id) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('report-year').value = new Date().getFullYear();
+      document.getElementById('report-month').value = String(new Date().getMonth() + 1);
+    });
+  </script>
+</body>
+</html>

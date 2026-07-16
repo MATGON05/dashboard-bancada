@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendamentos - SUIT-TECH</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo"><img src="logo.png" alt="SUIT-TECH"></span>
+        <div>
+          <h1>SUIT-TECH</h1>
+          <small>Assistência Técnica</small>
+        </div>
+      </div>
+      <nav>
+        <a href="index.html" data-page="dashboard">Dashboard</a>
+        <a href="clientes.html" data-page="clientes">Clientes</a>
+        <a href="orcamentos.html" data-page="orcamentos">Orçamentos</a>
+        <a href="caixa-entrada.html" data-page="caixa-entrada">Caixa Entrada</a>
+        <a href="caixa-saida.html" data-page="caixa-saida">Caixa Saída</a>
+        <a href="relatorios.html" data-page="relatorios">Relatórios</a>
+        <a href="agendamentos.html" class="active" data-page="agendamentos">Agendamentos</a>
+      </nav>
+      <footer class="sidebar-footer">
+        <span> rodando local</span>
+      </footer>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <h2>Agendamentos</h2>
+      </header>
+
+      <section class="panel">
+        <div class="toolbar">
+          <input type="text" id="search-appointment" placeholder="Buscar por cliente, aparelho ou defeito..." oninput="renderAppointments()">
+          <select id="filter-appointment-status" onchange="renderAppointments()">
+            <option value="">Todos os status</option>
+            <option>Agendado</option>
+            <option>Confirmado</option>
+            <option>Cancelado</option>
+            <option>Concluído</option>
+          </select>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Data/Hora</th>
+              <th>Cliente</th>
+              <th>Aparelho</th>
+              <th>Defeito</th>
+              <th>Lembrete</th>
+              <th>Status</th>
+              <th class="actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="appointments-table">
+            <tr><td colspan="8" class="empty">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <div id="appointment-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="appointment-modal-title">Novo Agendamento</h3>
+        <button class="close" onclick="closeAppointmentModal()">&times;</button>
+      </div>
+      <form id="appointment-form" onsubmit="saveAppointment(event)">
+        <input type="hidden" id="appointment-id">
+        <input type="hidden" id="appointment-budget-id">
+        <div class="form-grid">
+          <div class="form-group span-2">
+            <label>Orçamento / Cliente</label>
+            <select id="appointment-budget" onchange="document.getElementById('appointment-budget-id').value = this.value"></select>
+          </div>
+          <div class="form-group">
+            <label>Data e Hora *</label>
+            <input type="datetime-local" id="appointment-date" required>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="appointment-status">
+              <option>Agendado</option>
+              <option>Confirmado</option>
+              <option>Cancelado</option>
+              <option>Concluído</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="appointment-reminder"> Lembrete
+            </label>
+          </div>
+          <div class="form-group span-2">
+            <label>Observações</label>
+            <textarea id="appointment-notes" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" onclick="closeAppointmentModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBudgetsIntoSelect('appointment-budget');
+      loadAppointments();
+    });
+  </script>
+</body>
+</html>
